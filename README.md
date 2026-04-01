@@ -5,6 +5,7 @@ This is a simple monitor-friendly dashboard for a Linear workspace. It reads dat
 ## What it does
 
 - Pulls teams, projects, and issues from Linear.
+- Scopes dashboard data to a single initiative, defaulting to `Allevo`.
 - Re-syncs every 5 minutes by default.
 - Supports an optional Linear webhook endpoint for near-real-time refreshes.
 - Streams updates to the browser with Server-Sent Events, so the dashboard refreshes itself without a page reload.
@@ -56,6 +57,7 @@ Without a webhook configured, the dashboard still refreshes every 5 minutes.
 ## Environment variables
 
 - `LINEAR_API_KEY`: required
+- `LINEAR_INITIATIVE_NAME`: optional, defaults to `Allevo`
 - `LINEAR_WEBHOOK_SECRET`: optional but recommended for webhook verification
 - `PORT`: defaults to `3000`
 - `SYNC_INTERVAL_MS`: defaults to `300000`

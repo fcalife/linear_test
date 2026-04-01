@@ -10,9 +10,11 @@ loadDotEnv(path.join(__dirname, ".env"));
 const PORT = Number(process.env.PORT || 3000);
 const SYNC_INTERVAL_MS = Number(process.env.SYNC_INTERVAL_MS || 300000);
 const PUBLIC_DIR = path.join(__dirname, "public");
+const LINEAR_INITIATIVE_NAME = process.env.LINEAR_INITIATIVE_NAME || "Allevo";
 
 const linearClient = createLinearClient({
   apiKey: process.env.LINEAR_API_KEY || "",
+  initiativeName: LINEAR_INITIATIVE_NAME,
 });
 
 const store = createDashboardStore({ linearClient });
@@ -53,6 +55,7 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 200, {
         ok: true,
         hasApiKey: Boolean(process.env.LINEAR_API_KEY),
+        initiativeName: LINEAR_INITIATIVE_NAME,
         syncIntervalMs: SYNC_INTERVAL_MS,
       });
     }
