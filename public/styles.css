@@ -65,9 +65,9 @@ body::before {
 
 .hero {
   display: grid;
-  grid-template-columns: 1.8fr 1fr;
+  grid-template-columns: minmax(0, 1.55fr) minmax(460px, 1.25fr);
   gap: 24px;
-  align-items: stretch;
+  align-items: center;
 }
 
 .hero-brand {
@@ -80,7 +80,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 22px;
-  min-height: 132px;
+  min-height: 112px;
 }
 
 .brand-copy {
@@ -97,9 +97,9 @@ body::before {
   height: auto;
   object-fit: contain;
   border-radius: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.9);
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 16px 22px rgba(0, 0, 0, 0.4)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
 }
 
 .eyebrow {
@@ -164,10 +164,16 @@ h3 {
   position: relative;
   overflow: hidden;
   border-radius: 30px;
-  padding: 26px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 168px) minmax(0, 1fr);
+  grid-template-areas:
+    "label value"
+    "label meta";
+  column-gap: 18px;
+  row-gap: 6px;
+  align-content: center;
+  align-self: center;
 }
 
 .status-card::after,
@@ -207,17 +213,25 @@ th,
   letter-spacing: 0.14em;
 }
 
+.status-label {
+  grid-area: label;
+  align-self: center;
+}
+
 .status-value {
-  margin-top: 14px;
-  font-size: 1.85rem;
+  grid-area: value;
+  margin-top: 0;
+  font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.04em;
+  line-height: 1.05;
 }
 
 .status-meta {
-  margin-top: 10px;
+  grid-area: meta;
+  margin-top: 0;
   color: var(--muted);
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 .metrics {
@@ -596,6 +610,15 @@ tbody tr:last-child td {
   .brand-lockup {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .status-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "label"
+      "value"
+      "meta";
+    row-gap: 8px;
   }
 
   .brand-copy h1 {
