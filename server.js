@@ -10,6 +10,7 @@ loadDotEnv(path.join(__dirname, ".env"));
 const PORT = Number(process.env.PORT || 3000);
 const SYNC_INTERVAL_MS = Number(process.env.SYNC_INTERVAL_MS || 300000);
 const PUBLIC_DIR = path.join(__dirname, "public");
+const ASSETS_DIR = path.join(__dirname, "assets");
 const LINEAR_INITIATIVE_NAME = process.env.LINEAR_INITIATIVE_NAME || "Allevo";
 
 const linearClient = createLinearClient({
@@ -39,7 +40,7 @@ async function startSyncLoop() {
   try {
     await store.refresh("startup");
   } catch (error) {
-    console.error(`Initial sync skipped: ${error.message}`);
+    console.error(`Sincronizacao inicial ignorada: ${error.message}`);
   }
 
   setInterval(() => {
@@ -86,7 +87,7 @@ const server = http.createServer(async (req, res) => {
       try {
         payload = JSON.parse(rawBody.toString("utf8"));
       } catch {
-        return sendJson(res, 400, { ok: false, error: "Invalid JSON payload." });
+        return sendJson(res, 400, { ok: false, error: "Payload JSON invalido." });
       }
 
       if (process.env.LINEAR_WEBHOOK_SECRET) {
@@ -99,7 +100,7 @@ const server = http.createServer(async (req, res) => {
             providedSignature,
           })
         ) {
-          return sendJson(res, 401, { ok: false, error: "Invalid signature." });
+          return sendJson(res, 401, { ok: false, error: "Assinatura invalida." });
         }
 
         if (
@@ -108,7 +109,7 @@ const server = http.createServer(async (req, res) => {
         ) {
           return sendJson(res, 401, {
             ok: false,
-            error: "Webhook timestamp is too old.",
+            error: "O timestamp do webhook esta muito antigo.",
           });
         }
       }
@@ -122,7 +123,7 @@ const server = http.createServer(async (req, res) => {
       return serveStatic(req, res, url.pathname);
     }
 
-    sendJson(res, 404, { ok: false, error: "Not found." });
+    sendJson(res, 404, { ok: false, error: "Nao encontrado." });
   } catch (error) {
     sendJson(res, 500, { ok: false, error: error.message });
   }
@@ -130,21 +131,26 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   startSyncLoop().catch((error) => {
-    console.error(`Sync loop failed: ${error.message}`);
+    console.error(`Falha no loop de sincronizacao: ${error.message}`);
   });
-  console.log(`Linear room dashboard listening on http://localhost:${PORT}`);
+  console.log(`Painel do Linear ouvindo em http://localhost:${PORT}`);
 });
 
 function serveStatic(req, res, pathname) {
+  const isAssetsRequest = pathname.startsWith("/assets/");
+  const baseDir = isAssetsRequest ? ASSETS_DIR : PUBLIC_DIR;
   const requested = pathname === "/" ? "/index.html" : pathname;
-  const filePath = path.normalize(path.join(PUBLIC_DIR, requested));
+  const normalizedRequested = isAssetsRequest
+    ? requested.replace(/^\/assets/, "")
+    : requested;
+  const filePath = path.normalize(path.join(baseDir, normalizedRequested));
 
-  if (!filePath.startsWith(PUBLIC_DIR)) {
-    return sendJson(res, 403, { ok: false, error: "Forbidden." });
+  if (!filePath.startsWith(baseDir)) {
+    return sendJson(res, 403, { ok: false, error: "Acesso negado." });
   }
 
   if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-    return sendJson(res, 404, { ok: false, error: "Not found." });
+    return sendJson(res, 404, { ok: false, error: "Nao encontrado." });
   }
 
   res.writeHead(200, { "Content-Type": contentTypeFor(filePath) });
@@ -164,6 +170,13 @@ function contentTypeFor(filePath) {
       return "application/json; charset=utf-8";
     case ".svg":
       return "image/svg+xml";
+    case ".png":
+      return "image/png";
+    case ".jpg":
+    case ".jpeg":
+      return "image/jpeg";
+    case ".webp":
+      return "image/webp";
     default:
       return "application/octet-stream";
   }

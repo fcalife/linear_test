@@ -1,80 +1,78 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Linear Room Dashboard</title>
+    <title>Painel Allevo</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
     <main class="shell">
       <section class="hero">
-        <div>
-          <p class="eyebrow">Monitor mode</p>
-          <h1>Linear Room Dashboard</h1>
-          <p class="subtitle">
-            A live view of issues, projects, and ownership across your Linear workspace.
-          </p>
+        <div class="hero-brand">
+          <div class="brand-lockup">
+            <img
+              class="brand-logo"
+              src="/assets/dashboard_logo.png"
+              alt="Logo do dashboard"
+            >
+            <div class="brand-copy">
+              <p class="eyebrow">Gestao a vista</p>
+              <h1>Painel Allevo</h1>
+            </div>
+          </div>
         </div>
         <div class="status-card">
-          <p class="status-label">Sync status</p>
-          <p class="status-value" id="sync-status">Waiting for first sync</p>
-          <p class="status-meta" id="sync-meta">Configure your API key to begin.</p>
+          <p class="status-label">Status de sincronizacao</p>
+          <p class="status-value" id="sync-status">Aguardando a primeira sincronizacao</p>
+          <p class="status-meta" id="sync-meta">Configure sua chave de API para comecar.</p>
         </div>
       </section>
 
       <section class="metrics" id="metrics"></section>
 
-      <section class="grid">
+      <section class="grid grid-single">
         <article class="panel">
           <div class="panel-header">
-            <h2>By Team</h2>
-            <span id="team-count" class="panel-meta">0 teams</span>
+            <h2>Iniciativas</h2>
+            <span class="panel-meta">Mais recentemente atualizados</span>
           </div>
-          <div id="teams" class="stack"></div>
-        </article>
-
-        <article class="panel">
-          <div class="panel-header">
-            <h2>Ownership</h2>
-            <span class="panel-meta">Open work by assignee</span>
-          </div>
-          <div id="assignees" class="stack"></div>
+          <div id="projects" class="stack"></div>
         </article>
       </section>
 
-      <section class="grid grid-wide">
+      <section class="grid grid-wide-left">
         <article class="panel">
           <div class="panel-header">
-            <h2>Recently Updated Issues</h2>
-            <span class="panel-meta">Last 12 touched items</span>
+            <h2>Responsaveis</h2>
+            <span class="panel-meta">Trabalho em aberto por responsavel</span>
+          </div>
+          <div id="assignees" class="stack"></div>
+        </article>
+
+        <article class="panel issues-panel">
+          <div class="panel-header">
+            <h2>Issues atualizadas recentemente</h2>
+            <span class="panel-meta">Ultimos 12 itens com atividade</span>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>Issue</th>
-                  <th>Team</th>
-                  <th>Owner</th>
-                  <th>State</th>
-                  <th>Priority</th>
-                  <th>Updated</th>
+                  <th>Time</th>
+                  <th>Responsavel</th>
+                  <th>Status</th>
+                  <th>Prioridade</th>
+                  <th>Atualizada</th>
                 </tr>
               </thead>
               <tbody id="recent-issues"></tbody>
             </table>
           </div>
         </article>
-
-        <article class="panel">
-          <div class="panel-header">
-            <h2>Projects</h2>
-            <span class="panel-meta">Most recently touched</span>
-          </div>
-          <div id="projects" class="stack"></div>
-        </article>
       </section>
     </main>
     <script src="/app.js"></script>
   </body>
-  </html>
+</html>
