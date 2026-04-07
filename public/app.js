@@ -189,7 +189,7 @@ function renderProjectTimeline(timeline) {
 
   const boundsText =
     timeline.timelineStart && timeline.timelineEnd
-      ? `Linha do tempo compartilhada de ${formatDate(timeline.timelineStart)} ate ${formatDate(timeline.timelineEnd)}.`
+      ? `Linha do tempo compartilhada de ${formatTimelineDate(timeline.timelineStart)} ate ${formatTimelineDate(timeline.timelineEnd)}.`
       : "Aguardando datas suficientes para desenhar a linha do tempo.";
 
   const mappingNotice = timeline.hasMappings
@@ -236,7 +236,7 @@ function renderAxis(start, end) {
     .map(
       (tick) => `
         <div class="timeline-tick" style="left:${tick.position}%;">
-          <span>${escapeHtml(formatDate(tick.date))}</span>
+          <span>${escapeHtml(formatTimelineDate(tick.date))}</span>
         </div>
       `,
     )
@@ -284,7 +284,7 @@ function renderPhase(phase, timeline) {
   const style = `left:${phase.left}%;width:${phase.width}%;top:${12 + phase.lane * 58}px;`;
 
   const dates = phase.startedAt || phase.endedAt
-    ? `${formatDate(phase.startedAt || phase.endedAt)} - ${formatDate(phase.endedAt || phase.startedAt)}`
+    ? `${formatTimelineDate(phase.startedAt || phase.endedAt)} - ${formatTimelineDate(phase.endedAt || phase.startedAt)}`
     : "Sem datas encontradas";
 
   return `
@@ -393,6 +393,17 @@ function formatRoadmapStart(value) {
     .replace(".", "");
 
   return `Inicio: ${formatted}`;
+}
+
+function formatTimelineDate(value) {
+  const parts = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "long",
+  }).formatToParts(new Date(value));
+  const day = parts.find((part) => part.type === "day")?.value ?? "";
+  const month = parts.find((part) => part.type === "month")?.value ?? "";
+
+  return `${day}/${month}`;
 }
 
 function translateSyncReason(value) {
