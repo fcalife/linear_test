@@ -11,6 +11,7 @@ const PORT = Number(process.env.PORT || 3000);
 const SYNC_INTERVAL_MS = Number(process.env.SYNC_INTERVAL_MS || 300000);
 const PUBLIC_DIR = path.join(__dirname, "public");
 const ASSETS_DIR = path.join(__dirname, "assets");
+const ROADMAP_CONFIG_PATH = path.join(__dirname, "roadmap.txt");
 const LINEAR_INITIATIVE_NAME = process.env.LINEAR_INITIATIVE_NAME || "Allevo";
 
 const linearClient = createLinearClient({
@@ -18,7 +19,10 @@ const linearClient = createLinearClient({
   initiativeName: LINEAR_INITIATIVE_NAME,
 });
 
-const store = createDashboardStore({ linearClient });
+const store = createDashboardStore({
+  linearClient,
+  roadmapConfigPath: ROADMAP_CONFIG_PATH,
+});
 const sseClients = new Set();
 
 function broadcast(event, payload) {

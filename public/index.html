@@ -17,25 +17,35 @@
               alt="Logo do dashboard"
             >
             <div class="brand-copy">
-              <p class="eyebrow">Gestao a vista</p>
+              <p class="eyebrow">Gestão à vista</p>
               <h1>Painel Allevo</h1>
             </div>
           </div>
         </div>
         <div class="status-card">
-          <p class="status-label">Status de sincronizacao</p>
-          <p class="status-value" id="sync-status">Aguardando a primeira sincronizacao</p>
-          <p class="status-meta" id="sync-meta">Configure sua chave de API para comecar.</p>
+          <p class="status-label">Status de sincronização</p>
+          <p class="status-value" id="sync-status">Aguardando a primeira sincronização</p>
+          <p class="status-meta" id="sync-meta">Configure sua chave de API para começar.</p>
         </div>
       </section>
 
-      <section class="metrics" id="metrics"></section>
+      <section class="metrics is-hidden" id="metrics"></section>
+
+      <section class="grid grid-single">
+        <article class="panel panel-roadmap">
+          <div class="panel-header">
+            <h2>Roadmap</h2>
+            <span class="panel-meta" id="roadmap-meta"></span>
+          </div>
+          <div id="roadmap"></div>
+        </article>
+      </section>
 
       <section class="grid grid-single">
         <article class="panel">
           <div class="panel-header">
             <h2>Iniciativas</h2>
-            <span class="panel-meta">Mais recentemente atualizados</span>
+            <span class="panel-meta">Mais recentemente atualizadas</span>
           </div>
           <div id="projects" class="stack"></div>
         </article>
@@ -44,8 +54,8 @@
       <section class="grid grid-wide-left">
         <article class="panel">
           <div class="panel-header">
-            <h2>Responsaveis</h2>
-            <span class="panel-meta">Trabalho em aberto por responsavel</span>
+            <h2>Responsáveis</h2>
+            <span class="panel-meta">Trabalho em aberto por responsável</span>
           </div>
           <div id="assignees" class="stack"></div>
         </article>

@@ -2,6 +2,8 @@ const metricsEl = document.getElementById("metrics");
 const assigneesEl = document.getElementById("assignees");
 const recentIssuesEl = document.getElementById("recent-issues");
 const projectsEl = document.getElementById("projects");
+const roadmapEl = document.getElementById("roadmap");
+const roadmapMetaEl = document.getElementById("roadmap-meta");
 const syncStatusEl = document.getElementById("sync-status");
 const syncMetaEl = document.getElementById("sync-meta");
 
@@ -79,6 +81,8 @@ function render(payload) {
     `<tr><td colspan="6" class="empty">Ainda nao ha dados de issues.</td></tr>`,
   );
 
+  roadmapEl.innerHTML = renderRoadmap(payload.roadmap);
+  roadmapMetaEl.textContent = buildRoadmapMeta(payload.roadmap);
   projectsEl.innerHTML = renderProjectTimeline(payload.projectTimeline);
 
   syncStatusEl.textContent =
@@ -97,6 +101,85 @@ function render(payload) {
   } else {
     syncMetaEl.textContent = "Aguardando a primeira sincronizacao bem-sucedida.";
   }
+}
+
+function renderRoadmap(roadmap) {
+  if (roadmap?.error) {
+    return `<p class="empty">${escapeHtml(roadmap.error)}</p>`;
+  }
+
+  if (!roadmap?.items?.length) {
+    return `<p class="empty">Preencha o arquivo roadmap.txt para exibir a sequencia do roadmap.</p>`;
+  }
+
+  return `
+    <div class="roadmap-strip">
+      ${roadmap.items.map((item, index) => renderRoadmapItem(item, index, roadmap.items.length)).join("")}
+    </div>
+  `;
+}
+
+function renderRoadmapItem(item, index, total) {
+  const classes = [
+    "roadmap-item",
+    item.status === "in_progress" ? "is-in-progress" : "",
+    item.status === "completed" ? "is-complete" : "",
+    item.status === "missing" ? "is-missing" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const statusText =
+    item.status === "in_progress"
+      ? `${item.progress}% concluido`
+      : item.status === "completed"
+        ? "Concluido"
+        : item.status === "missing"
+          ? item.message || "Nao encontrado"
+          : "Planejado";
+  const progressBar =
+    item.status === "in_progress" || item.status === "completed"
+      ? `
+        <div class="roadmap-progress" aria-hidden="true">
+          <div class="roadmap-progress-fill" style="width:${Math.max(0, Math.min(item.progress ?? 0, 100))}%;"></div>
+        </div>
+      `
+      : "";
+
+  const connector =
+    index < total - 1
+      ? `<img class="roadmap-connector" src="/assets/arrow.png" alt="" aria-hidden="true">`
+      : "";
+  return `
+    <div class="roadmap-node">
+      <article class="${classes}">
+        <h3 class="roadmap-title">${escapeHtml(item.title)}</h3>
+        <p class="roadmap-date">${escapeHtml(formatRoadmapStart(item.startDate))}</p>
+        <p class="roadmap-status">${escapeHtml(statusText)}</p>
+        ${progressBar}
+      </article>
+      ${connector}
+    </div>
+  `;
+}
+
+function buildRoadmapMeta(roadmap) {
+  if (roadmap?.error) {
+    return "Corrija o arquivo de configuracao do roadmap";
+  }
+
+  const configured = roadmap?.totalConfigured || 0;
+  const unresolved = roadmap?.unresolvedCount || 0;
+
+  if (!configured) {
+    return "Definido manualmente via roadmap.txt";
+  }
+
+  if (!unresolved) {
+    return "";
+  }
+
+  return `${configured} itens configurados, ${unresolved} nao encontrados`;
 }
 
 function renderProjectTimeline(timeline) {
@@ -295,6 +378,21 @@ function formatDateTime(value) {
 
 function formatDate(value) {
   return new Date(value).toLocaleDateString("pt-BR");
+}
+
+function formatRoadmapStart(value) {
+  if (!value) {
+    return "Inicio: sem data";
+  }
+
+  const formatted = new Date(value)
+    .toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+    })
+    .replace(".", "");
+
+  return `Inicio: ${formatted}`;
 }
 
 function translateSyncReason(value) {

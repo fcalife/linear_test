@@ -62,6 +62,15 @@ Without a webhook configured, the dashboard still refreshes every 5 minutes.
 - `PORT`: defaults to `3000`
 - `SYNC_INTERVAL_MS`: defaults to `300000`
 
+## Roadmap manual
+
+The `Roadmap` panel is driven by the local `roadmap.txt` file.
+
+- Use `project: Project name`
+- Use `milestone: Project name > Milestone name`
+- Optionally append `| inicio=dd/mm/aaaa` or `| inicio=aaaa-mm-dd` to override the start date manually
+- Blank lines and lines starting with `#` are ignored
+
 ## Notes
 
 - The app uses Linear's GraphQL endpoint at `https://api.linear.app/graphql`.

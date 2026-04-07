@@ -1,0 +1,19 @@
+# Ordem manual do painel Roadmap.
+# Formatos aceitos:
+# project: Nome do projeto
+# milestone: Nome do projeto > Nome da milestone
+# Opcional:
+# | inicio=dd/mm/aaaa
+# | inicio=aaaa-mm-dd
+
+# Exemplo:
+# project: Allevo: Website institucional
+# milestone: Allevo: Produto X > MVP
+# project: Allevo: App mobile | inicio=15/04/2026
+
+project: Provas | inicio=30/03/2026
+milestone: Core > Biblioteca | inicio=07/04/2026
+milestone: Core > Página produto | inicio=14/04/2026
+milestone: Core > Página branded | inicio=14/04/2026
+milestone: Core > Perfil | inicio=21/04/2026
+milestone: Core > Player | inicio=21/04/2026
