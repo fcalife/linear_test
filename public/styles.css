@@ -168,6 +168,8 @@ h3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .status-card::after,
@@ -208,12 +210,11 @@ th,
 }
 
 .status-label {
-  grid-area: label;
-  align-self: center;
+  align-self: flex-start;
 }
 
 .status-value {
-  margin-top: 1px;
+  margin-top: 4px;
   font-size: 1.85rem;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -221,7 +222,7 @@ th,
 }
 
 .status-meta {
-  margin-top: 4px;
+  margin-top: 6px;
   color: var(--muted);
   line-height: 1.35;
 }
